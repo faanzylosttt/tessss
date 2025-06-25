@@ -15,7 +15,7 @@
       let nomor = document.getElementById("nomor").value.trim();
       const out = document.getElementById("output");
 
-      // Normalisasi nomor: 08xx, 8xx → 62...
+      // Normalisasi
       if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
       else if (nomor.startsWith("8")) nomor = "62" + nomor;
       else if (!nomor.startsWith("62")) {
@@ -23,6 +23,7 @@
         return;
       }
 
+      // Cek format
       if (!/^62\d{8,}$/.test(nomor)) {
         out.textContent = "❌ Format tidak valid. Minimal 10 digit setelah 62.";
         return;
@@ -36,11 +37,19 @@
         });
 
         const data = await res.json();
-        out.textContent = JSON.stringify(data, null, 2);
-        console.log("✅ Response:", data);
+
+        if (res.status === 409) {
+          out.textContent = "⚠️ Nomor sudah ada di database.";
+        } else if (res.ok) {
+          out.textContent = "✅ Nomor berhasil ditambahkan.";
+        } else {
+          out.textContent = "❌ Gagal: " + (data.message || "Tidak diketahui.");
+        }
+
+        console.log("RESPON:", res.status, data);
       } catch (err) {
-        out.textContent = "❌ Gagal menghubungi server!\n" + err.message;
-        console.error("❌ Error fetch:", err);
+        out.textContent = "❌ Gagal konek ke server.\n" + err.message;
+        console.error("ERROR:", err);
       }
     }
   </script>
