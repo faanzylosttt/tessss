@@ -2,336 +2,93 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Panel Nomor DBV1</title>
+  <title>Login Panel DBV1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root {
-      --bg-dark: #0f172a;
-      --bg-card: #1e293b;
-      --bg-input: #334155;
-      --bg-btn: #38bdf8;
-      --bg-btn-hover: #0ea5e9;
-      --text-light: #f8fafc;
-      --text-muted: #e2e8f0;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-dark);
-      color: var(--text-light);
+      background: #0f172a;
+      color: #f8fafc;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 20px;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    .container {
-      background: var(--bg-card);
-      padding: 20px;
+    .login-box {
+      background: #1e293b;
+      padding: 30px;
       border-radius: 12px;
       width: 100%;
-      max-width: 450px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-      position: relative;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
     }
 
     h2 {
       text-align: center;
+      color: #38bdf8;
       margin-bottom: 20px;
-      font-size: 22px;
-      color: var(--bg-btn);
     }
 
-    input {
+    input, button {
       width: 100%;
       padding: 12px;
       font-size: 16px;
-      border-radius: 8px;
       border: none;
-      background: var(--bg-input);
-      color: white;
-      margin-bottom: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
     }
 
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
+    input {
+      background: #334155;
+      color: white;
     }
 
     button {
-      flex: 1;
-      padding: 12px;
-      font-size: 15px;
-      border: none;
-      border-radius: 8px;
-      background: var(--bg-btn);
+      background: #38bdf8;
       color: black;
-      font-weight: 600;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     button:hover {
-      background: var(--bg-btn-hover);
+      background: #0ea5e9;
     }
 
-    .list {
+    .msg {
       margin-top: 10px;
-    }
-
-    .item {
-      background: #334155;
-      margin-bottom: 8px;
-      padding: 6px 10px;
-      border-radius: 8px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      font-size: 14px;
-      color: #f1f5f9;
-      gap: 8px;
-    }
-
-    .item button {
-      background: #ef4444;
-      color: white;
-      width: 20px;
-      height: 20px;
-      font-size: 12px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      padding: 0;
-      line-height: 1;
       text-align: center;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .item button:hover {
-      background: #dc2626;
-    }
-
-    pre {
-      margin-top: 12px;
-      white-space: pre-wrap;
-      word-break: break-word;
       font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .loading {
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      z-index: 10;
-    }
-
-    .spinner {
-      border: 4px solid #334155;
-      border-top: 4px solid #38bdf8;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    #login-screen {
-      position: fixed;
-      inset: 0;
-      background: #0f172a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 99;
-    }
-
-    #login-screen input {
-      max-width: 300px;
-      margin-bottom: 10px;
-    }
-
-    .login-btn-wrap {
-      margin-top: 8px;
-      display: flex;
-      justify-content: center;
-    }
-
-    #login-screen button {
-      padding: 8px 20px;
-      font-size: 15px;
-      font-weight: bold;
-      background: var(--bg-btn);
-      color: black;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      width: auto;
-    }
-
-    #login-screen button:hover {
-      background: var(--bg-btn-hover);
-    }
-
-    #login-status {
       color: #f87171;
-      margin-top: 8px;
-      font-size: 13px;
     }
   </style>
 </head>
 <body>
-  <div id="login-screen">
-    <h2>🔐 Login Panel</h2>
-    <input type="text" id="user" placeholder="Username">
-    <input type="password" id="pass" placeholder="Password">
-    <div class="login-btn-wrap">
-      <button onclick="doLogin()">Masuk</button>
-    </div>
-    <pre id="login-status"></pre>
-  </div>
-
-  <div class="container" style="display:none;" id="panel">
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-    </div>
-
-    <h2>📱 Panel Nomor DBV1</h2>
-    <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxxx" />
-    <div class="button-group">
-      <button onclick="submitNomor()">➕ Tambah</button>
-      <button onclick="loadNomor()">📄 Lihat</button>
-    </div>
-    <pre id="output">Status akan muncul di sini...</pre>
-    <div class="list" id="list"></div>
+  <div class="login-box">
+    <h2>🔐 Login Panel DBV1</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Masuk</button>
+    <div id="msg" class="msg"></div>
   </div>
 
   <script>
-    function doLogin() {
-      const user = document.getElementById("user").value.trim();
-      const pass = document.getElementById("pass").value.trim();
-      const loginStatus = document.getElementById("login-status");
+    const credentials = {
+      admin: "admin123",     // username: admin
+      user: "user123"        // username: user
+    };
 
-      if (user === "admin" && pass === "dbv1pass") {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("panel").style.display = "block";
-        loadNomor();
+    function login() {
+      const user = document.getElementById("username").value.trim().toLowerCase();
+      const pass = document.getElementById("password").value.trim();
+      const msg = document.getElementById("msg");
+
+      if (user === "admin" && pass === credentials.admin) {
+        window.location.href = "admin.html";
+      } else if (user === "user" && pass === credentials.user) {
+        window.location.href = "user.html";
       } else {
-        loginStatus.textContent = "❌ Username atau password salah.";
-      }
-    }
-
-    function showLoading(show) {
-      document.getElementById("loading").style.display = show ? "flex" : "none";
-    }
-
-    async function submitNomor() {
-      let nomor = document.getElementById("nomor").value.trim();
-      const out = document.getElementById("output");
-
-      if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
-      else if (nomor.startsWith("8")) nomor = "62" + nomor;
-      else if (!nomor.startsWith("62")) {
-        out.textContent = "❌ Nomor tidak valid. Harus dimulai dari 62";
-        return;
-      }
-
-      if (!/^62\d{8,}$/.test(nomor)) {
-        out.textContent = "❌ Format nomor salah.";
-        return;
-      }
-
-      try {
-        showLoading(true);
-        const res = await fetch("/api/add-number", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ number: nomor })
-        });
-        const data = await res.json();
-
-        if (res.status === 409) out.textContent = "⚠️ Nomor sudah ada.";
-        else if (res.ok) {
-          out.textContent = "✅ Nomor berhasil ditambahkan.";
-          loadNomor();
-        } else out.textContent = "❌ Gagal tambah: " + data.message;
-      } catch (e) {
-        out.textContent = "❌ Error: " + e.message;
-      } finally {
-        showLoading(false);
-      }
-    }
-
-    async function loadNomor() {
-      const list = document.getElementById("list");
-      const out = document.getElementById("output");
-      list.innerHTML = "";
-      showLoading(true);
-
-      try {
-        const res = await fetch("/api/dbv1");
-        const data = await res.json();
-
-        if (!data.dbny || !Array.isArray(data.dbny)) {
-          out.textContent = "❌ Format DB salah.";
-          return;
-        }
-
-        out.textContent = `📦 Total: ${data.dbny.length} nomor ditemukan.`;
-        data.dbny.forEach((nomor, i) => {
-          const div = document.createElement("div");
-          div.className = "item";
-          div.innerHTML = `
-            <span>${i + 1}. ${nomor}</span>
-            <button onclick="hapusNomor('${nomor}')">✖</button>
-          `;
-          list.appendChild(div);
-        });
-      } catch (err) {
-        out.textContent = "❌ Gagal ambil data.\n" + err.message;
-      } finally {
-        showLoading(false);
-      }
-    }
-
-    async function hapusNomor(nomor) {
-      const out = document.getElementById("output");
-      if (!confirm(`Yakin ingin hapus nomor ${nomor}?`)) return;
-
-      try {
-        showLoading(true);
-        const res = await fetch("/api/delete-number", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ number: nomor })
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          out.textContent = "✅ Nomor dihapus.";
-          loadNomor();
-        } else {
-          out.textContent = "❌ Gagal hapus: " + data.message;
-        }
-      } catch (err) {
-        out.textContent = "❌ Error hapus.\n" + err.message;
-      } finally {
-        showLoading(false);
+        msg.textContent = "❌ Username atau password salah!";
       }
     }
   </script>
