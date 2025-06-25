@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>User Panel DBV1</title>
+  <title>Panel User DBV1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -60,11 +60,6 @@
 
     button:hover { background: var(--btn-hover); }
 
-    .login {
-      display: flex;
-      flex-direction: column;
-    }
-
     pre {
       margin-top: 12px;
       white-space: pre-wrap;
@@ -94,38 +89,15 @@
 </head>
 <body>
   <div class="container">
-    <h2>Panel User DBV1</h2>
+    <h2>📱 Panel User DBV1</h2>
 
-    <div id="login-form" class="login">
-      <input type="text" id="username" placeholder="Username user">
-      <input type="password" id="password" placeholder="Password user">
-      <button onclick="login()">🔐 Masuk</button>
-    </div>
-
-    <div id="user-panel" style="display:none">
-      <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxxxx" />
-      <button onclick="submitNomor()">➕ Tambah Nomor</button>
-      <div class="loading" id="loading"><div class="spinner"></div></div>
-      <pre id="output">Status akan muncul di sini...</pre>
-    </div>
+    <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxxxx" />
+    <button onclick="submitNomor()">➕ Tambah Nomor</button>
+    <div class="loading" id="loading"><div class="spinner"></div></div>
+    <pre id="output">Status akan muncul di sini...</pre>
   </div>
 
   <script>
-    const userUser = "user";
-    const userPass = "dbv1user";
-
-    function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-
-      if (user === userUser && pass === userPass) {
-        document.getElementById("login-form").style.display = "none";
-        document.getElementById("user-panel").style.display = "block";
-      } else {
-        alert("❌ Username atau password salah!");
-      }
-    }
-
     function showLoading(show) {
       document.getElementById("loading").style.display = show ? "flex" : "none";
     }
