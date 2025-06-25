@@ -149,16 +149,18 @@
       to { transform: rotate(360deg); }
     }
 
-    #login-screen {
-      position: fixed;
-      inset: 0;
-      background: #0f172a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 99;
-    }
+    #login-screen button {
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  background: var(--bg-btn);
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: auto;
+}
 
     #login-screen input {
       max-width: 300px;
