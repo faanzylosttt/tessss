@@ -149,26 +149,49 @@
       to { transform: rotate(360deg); }
     }
 
-    #login-screen button {
-  padding: 8px 20px;
-  font-size: 15px;
-  font-weight: bold;
-  background: var(--bg-btn);
-  color: black;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  width: auto;
-}
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+    }
 
     #login-screen input {
       max-width: 300px;
       margin-bottom: 10px;
     }
 
+    .login-btn-wrap {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+    }
+
     #login-screen button {
-      max-width: 300px;
+      padding: 8px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      background: var(--bg-btn);
+      color: black;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      width: auto;
+    }
+
+    #login-screen button:hover {
+      background: var(--bg-btn-hover);
+    }
+
+    #login-status {
+      color: #f87171;
+      margin-top: 8px;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -177,7 +200,9 @@
     <h2>🔐 Login Panel</h2>
     <input type="text" id="user" placeholder="Username">
     <input type="password" id="pass" placeholder="Password">
-    <button onclick="doLogin()">Masuk</button>
+    <div class="login-btn-wrap">
+      <button onclick="doLogin()">Masuk</button>
+    </div>
     <pre id="login-status"></pre>
   </div>
 
