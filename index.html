@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tambah Nomor DBV1</title>
+</head>
+<body>
+  <h1>Tambah Nomor Baru</h1>
+  <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxx">
+  <button onclick="submitNomor()">Tambah</button>
+  <pre id="output"></pre>
+
+  <script>
+    async function submitNomor() {
+      let nomor = document.getElementById("nomor").value.trim();
+      if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
+      const out = document.getElementById("output");
+      if (!/^62\d{8,}$/.test(nomor)) return out.textContent = "Nomor tidak valid!";
+
+      const res = await fetch("/api/add-number", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ number: nomor })
+      });
+
+      const data = await res.json();
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
