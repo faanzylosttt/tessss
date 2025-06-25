@@ -1,89 +1,64 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Tambah Nomor DBV1</title>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
     body {
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      background: linear-gradient(145deg, #1e293b, #0f172a);
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      color: #fff;
+      padding: 30px;
     }
-
-    .container {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 30px 40px;
-      border-radius: 20px;
+    .box {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 25px;
       max-width: 400px;
-      width: 90%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 22px;
-      color: #f8fafc;
-    }
-
-    input[type="text"] {
       width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      font-size: 16px;
-      background: #1e293b;
-      color: white;
-      outline: none;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
     }
-
+    input, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    input {
+      background: #334155;
+      color: white;
+    }
     button {
-      width: 100%;
-      padding: 12px;
-      background: #38bdf8;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      font-size: 16px;
+      background-color: #38bdf8;
+      color: black;
       cursor: pointer;
-      transition: 0.3s ease;
+      font-weight: bold;
     }
-
     button:hover {
-      background: #0ea5e9;
+      background-color: #0ea5e9;
     }
-
     pre {
-      margin-top: 15px;
-      background: #1e293b;
+      margin-top: 20px;
+      background: #0f172a;
       padding: 15px;
       border-radius: 10px;
-      font-size: 14px;
       white-space: pre-wrap;
-      word-break: break-word;
-      color: #d1d5db;
+      color: #e2e8f0;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tambah Nomor Baru</h1>
-    <input type="text" id="nomor" placeholder="Masukkan nomor">
-    <button onclick="submitNomor()">Tambah</button>
-    <pre id="output"></pre>
+  <div class="box">
+    <h2>Tambah Nomor Baru</h2>
+    <input type="text" id="nomor" placeholder="Masukkan nomor (62xxxx)">
+    <button onclick="submitNomor()">Tambah Nomor</button>
+    <button onclick="loadNomor()">📄 Lihat Semua Nomor</button>
+    <pre id="output">Status akan muncul di sini...</pre>
   </div>
 
   <script>
@@ -91,7 +66,6 @@
       let nomor = document.getElementById("nomor").value.trim();
       const out = document.getElementById("output");
 
-      // Normalisasi
       if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
       else if (nomor.startsWith("8")) nomor = "62" + nomor;
       else if (!nomor.startsWith("62")) {
@@ -99,9 +73,8 @@
         return;
       }
 
-      // Cek format
       if (!/^62\d{8,}$/.test(nomor)) {
-        out.textContent = "❌ Format tidak valid. Minimal 10 digit setelah 62.";
+        out.textContent = "❌ Format salah. Gunakan 62xxxxxxxxx";
         return;
       }
 
@@ -109,7 +82,7 @@
         const res = await fetch("/api/add-number", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ number: nomor })
+          body: JSON.stringify({ number: nomor }),
         });
 
         const data = await res.json();
@@ -121,11 +94,23 @@
         } else {
           out.textContent = "❌ Gagal: " + (data.message || "Tidak diketahui.");
         }
-
-        console.log("RESPON:", res.status, data);
       } catch (err) {
         out.textContent = "❌ Gagal konek ke server.\n" + err.message;
-        console.error("ERROR:", err);
+      }
+    }
+
+    async function loadNomor() {
+      const out = document.getElementById("output");
+      try {
+        const res = await fetch("/api/dbv1");
+        const data = await res.json();
+        if (!data.dbny || !Array.isArray(data.dbny)) {
+          out.textContent = "❌ Format DB salah.";
+          return;
+        }
+        out.textContent = `📦 Total: ${data.dbny.length} nomor:\n` + data.dbny.map((n, i) => `${i + 1}. ${n}`).join("\n");
+      } catch (err) {
+        out.textContent = "❌ Gagal ambil data.\n" + err.message;
       }
     }
   </script>
