@@ -6,7 +6,7 @@
 </head>
 <body>
   <h1>Tambah Nomor Baru</h1>
-  <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxx">
+  <input type="text" id="nomor" placeholder="Masukkan nomor">
   <button onclick="submitNomor()">Tambah</button>
   <pre id="output"></pre>
 
@@ -15,9 +15,16 @@
       let nomor = document.getElementById("nomor").value.trim();
       const out = document.getElementById("output");
 
+      // Normalisasi nomor: 08xx, 8xx → 62...
       if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
-      if (!/^62\\d{8,}$/.test(nomor)) {
-        out.textContent = "❌ Nomor tidak valid! Harus diawali 62 dan minimal 10 digit.";
+      else if (nomor.startsWith("8")) nomor = "62" + nomor;
+      else if (!nomor.startsWith("62")) {
+        out.textContent = "❌ Nomor tidak valid! Harus dimulai dari 08, 8, atau 62.";
+        return;
+      }
+
+      if (!/^62\d{8,}$/.test(nomor)) {
+        out.textContent = "❌ Format tidak valid. Minimal 10 digit setelah 62.";
         return;
       }
 
@@ -30,10 +37,10 @@
 
         const data = await res.json();
         out.textContent = JSON.stringify(data, null, 2);
-        console.log("✅ Respon:", data);
+        console.log("✅ Response:", data);
       } catch (err) {
-        console.error("❌ Gagal fetch API:", err);
         out.textContent = "❌ Gagal menghubungi server!\n" + err.message;
+        console.error("❌ Error fetch:", err);
       }
     }
   </script>
