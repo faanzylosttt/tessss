@@ -9,10 +9,12 @@
       background: #0f172a;
       color: #f8fafc;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       font-family: 'Segoe UI', sans-serif;
+      margin: 0;
     }
 
     .login-box {
@@ -61,6 +63,13 @@
       font-size: 14px;
       color: #f87171;
     }
+
+    .copyright {
+      margin-top: 20px;
+      font-size: 13px;
+      text-align: center;
+      color: #94a3b8;
+    }
   </style>
 </head>
 <body>
@@ -71,6 +80,8 @@
     <button onclick="login()">Masuk</button>
     <div id="msg" class="msg"></div>
   </div>
+
+  <div class="copyright">© 2025 Faanzy Market</div>
 
   <script>
     const credentials = {
