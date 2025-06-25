@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Panel DBV1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --input: #334155;
+      --btn: #38bdf8;
+      --btn-hover: #0ea5e9;
+      --text: #f8fafc;
+      --muted: #e2e8f0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--btn);
+      margin-bottom: 16px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input { background: var(--input); color: white; }
+    button {
+      background: var(--btn);
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--btn-hover); }
+
+    .login {
+      display: flex;
+      flex-direction: column;
+    }
+
+    pre {
+      margin-top: 12px;
+      white-space: pre-wrap;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .loading {
+      display: none;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 4px solid var(--input);
+      border-top: 4px solid var(--btn);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Panel User DBV1</h2>
+
+    <div id="login-form" class="login">
+      <input type="text" id="username" placeholder="Username user">
+      <input type="password" id="password" placeholder="Password user">
+      <button onclick="login()">🔐 Masuk</button>
+    </div>
+
+    <div id="user-panel" style="display:none">
+      <input type="text" id="nomor" placeholder="Masukkan nomor 62xxxxxx" />
+      <button onclick="submitNomor()">➕ Tambah Nomor</button>
+      <div class="loading" id="loading"><div class="spinner"></div></div>
+      <pre id="output">Status akan muncul di sini...</pre>
+    </div>
+  </div>
+
+  <script>
+    const userUser = "user";
+    const userPass = "dbv1user";
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+
+      if (user === userUser && pass === userPass) {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("user-panel").style.display = "block";
+      } else {
+        alert("❌ Username atau password salah!");
+      }
+    }
+
+    function showLoading(show) {
+      document.getElementById("loading").style.display = show ? "flex" : "none";
+    }
+
+    async function submitNomor() {
+      let nomor = document.getElementById("nomor").value.trim();
+      const out = document.getElementById("output");
+
+      if (nomor.startsWith("08")) nomor = "62" + nomor.slice(1);
+      else if (nomor.startsWith("8")) nomor = "62" + nomor;
+      else if (!nomor.startsWith("62")) return out.textContent = "❌ Nomor harus dimulai dari 62";
+
+      if (!/^62\d{8,}$/.test(nomor)) return out.textContent = "❌ Format nomor tidak valid.";
+
+      try {
+        showLoading(true);
+        const res = await fetch("/api/add-number", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ number: nomor })
+        });
+
+        const data = await res.json();
+
+        if (res.status === 409) out.textContent = "⚠️ Nomor sudah ada.";
+        else if (res.ok) out.textContent = "✅ Nomor berhasil ditambahkan.";
+        else out.textContent = "❌ Gagal tambah: " + (data.message || "Tidak diketahui");
+      } catch (err) {
+        out.textContent = "❌ Error: " + err.message;
+      } finally {
+        showLoading(false);
+      }
+    }
+  </script>
+</body>
+</html>
