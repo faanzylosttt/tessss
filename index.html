@@ -5,7 +5,7 @@
   <title>Panel Nomor DBV1</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       background: #0f172a;
       color: #f8fafc;
       display: flex;
@@ -20,8 +20,14 @@
       max-width: 500px;
       width: 100%;
       box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
     }
-    h2 { text-align: center; margin-bottom: 10px; }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #38bdf8;
+    }
     input, button {
       width: 100%;
       padding: 10px;
@@ -29,33 +35,56 @@
       border: none;
       border-radius: 8px;
       font-size: 16px;
+      transition: all 0.2s ease;
     }
-    input { background: #334155; color: white; }
+    input {
+      background: #334155;
+      color: white;
+    }
     button {
       background: #38bdf8;
       color: black;
       font-weight: bold;
       cursor: pointer;
     }
-    button:hover { background: #0ea5e9; }
-    .list { margin-top: 20px; }
+    button:hover {
+      background: #0ea5e9;
+    }
+    .list {
+      margin-top: 20px;
+    }
     .item {
       background: #334155;
       margin-bottom: 8px;
-      padding: 10px;
+      padding: 10px 14px;
       border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 15px;
+      color: #f1f5f9;
     }
     .item button {
-      background: red;
+      background: #ef4444;
       color: white;
-      padding: 5px 10px;
+      padding: 4px 10px;
+      font-size: 13px;
       border: none;
-      border-radius: 6px;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
-    pre { white-space: pre-wrap; word-break: break-word; margin-top: 10px; color: #e2e8f0; }
+    .item button:hover {
+      background: #dc2626;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 10px;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -69,6 +98,7 @@
   </div>
 
   <script>
+    // JavaScript kamu tetap seperti sebelumnya, tidak diubah
     async function submitNomor() {
       let nomor = document.getElementById("nomor").value.trim();
       const out = document.getElementById("output");
@@ -123,7 +153,7 @@
           div.className = "item";
           div.innerHTML = `
             ${i + 1}. ${nomor}
-            <button onclick="hapusNomor('${nomor}')">Hapus</button>
+            <button onclick="hapusNomor('${nomor}')">✖</button>
           `;
           list.appendChild(div);
         });
