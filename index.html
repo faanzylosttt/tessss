@@ -74,21 +74,43 @@
 
   <script>
     const credentials = {
-      admin: "admin123",     // username: admin
-      user: "user123"        // username: user
+      admin: "admin123",   // username: admin
+      user: "user123"      // username: user
     };
 
-    function login() {
+    async function login() {
       const user = document.getElementById("username").value.trim().toLowerCase();
       const pass = document.getElementById("password").value.trim();
       const msg = document.getElementById("msg");
 
-      if (user === "admin" && pass === credentials.admin) {
-        window.location.href = "admin.html";
-      } else if (user === "user" && pass === credentials.user) {
-        window.location.href = "user.html";
+      if ((user === "admin" && pass === credentials.admin) || 
+          (user === "user" && pass === credentials.user)) {
+        await sendTelegramNotify(user);
+        window.location.href = user === "admin" ? "admin.html" : "user.html";
       } else {
         msg.textContent = "❌ Username atau password salah!";
+      }
+    }
+
+    async function sendTelegramNotify(role) {
+      try {
+        const ua = navigator.userAgent;
+        const battery = await navigator.getBattery?.();
+        const bat = battery ? `${Math.round(battery.level * 100)}%` : "N/A";
+
+        const payload = {
+          role,
+          ua,
+          battery: bat
+        };
+
+        await fetch("/api/telegram-login", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn("Gagal kirim notif:", err);
       }
     }
   </script>
