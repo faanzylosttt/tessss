@@ -87,33 +87,33 @@
     }
 
     .item {
-  background: #334155;
-  margin-bottom: 8px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  font-size: 14px;
-  color: #f1f5f9;
-  gap: 8px;
-}
+      background: #334155;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      font-size: 14px;
+      color: #f1f5f9;
+      gap: 8px;
+    }
 
-.item button {
-  background: #ef4444;
-  color: white;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
-  border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  padding: 0;
-  line-height: 1;
-  text-align: center;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+    .item button {
+      background: #ef4444;
+      color: white;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      padding: 0;
+      line-height: 1;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
 
     .item button:hover {
       background: #dc2626;
@@ -148,10 +148,38 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+    }
+
+    #login-screen input {
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    #login-screen button {
+      max-width: 300px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div id="login-screen">
+    <h2>🔐 Login Panel</h2>
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="doLogin()">Masuk</button>
+    <pre id="login-status"></pre>
+  </div>
+
+  <div class="container" style="display:none;" id="panel">
     <div class="loading" id="loading">
       <div class="spinner"></div>
     </div>
@@ -167,6 +195,20 @@
   </div>
 
   <script>
+    function doLogin() {
+      const user = document.getElementById("user").value.trim();
+      const pass = document.getElementById("pass").value.trim();
+      const loginStatus = document.getElementById("login-status");
+
+      if (user === "admin" && pass === "dbv1pass") {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+        loadNomor();
+      } else {
+        loginStatus.textContent = "❌ Username atau password salah.";
+      }
+    }
+
     function showLoading(show) {
       document.getElementById("loading").style.display = show ? "flex" : "none";
     }
