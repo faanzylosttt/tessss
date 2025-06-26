@@ -1,22 +1,23 @@
 export default async function handler(req, res) {
-  if (req.method !== "GET") return res.status(405).send("Only GET allowed");
+  if (req.method !== "GET") {
+    return res.status(405).send("Only GET allowed");
+  }
 
-  const repo = "faanzylosttt/DBV1";
-  const filename = "DBV1.json";
-  const token = process.env.GITHUB_TOKEN;
+  const rawUrl = "https://raw.githubusercontent.com/faanzylosttt/DBV1/main/DBV1.json";
 
   try {
-    const getFile = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
+    const response = await fetch(rawUrl);
 
-    const file = await getFile.json();
-    const content = JSON.parse(Buffer.from(file.content, "base64").toString());
-    res.status(200).json(content);
+    if (!response.ok) {
+      throw new Error("Gagal ambil data dari GitHub");
+    }
+
+    const data = await response.json();
+    res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "❌ Gagal mengambil data", error: err.message });
+    res.status(500).json({
+      message: "❌ Gagal mengambil data",
+      error: err.message,
+    });
   }
 }
