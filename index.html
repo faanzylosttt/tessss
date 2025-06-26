@@ -70,25 +70,6 @@
       text-align: center;
       color: #94a3b8;
     }
-
-    .pw-box {
-      display: none;
-      margin-top: 20px;
-    }
-
-    .pw-box h3 {
-      margin-bottom: 10px;
-      color: #38bdf8;
-      text-align: center;
-    }
-
-    .success {
-      color: #4ade80;
-    }
-
-    .error {
-      color: #f87171;
-    }
   </style>
 </head>
 <body>
@@ -98,79 +79,27 @@
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Masuk</button>
     <div id="msg" class="msg"></div>
-
-    <div class="pw-box" id="pw-box">
-      <h3>🔁 Ubah Password</h3>
-      <input type="password" id="newpw" placeholder="Password baru">
-      <button onclick="ubahPassword()">Ubah Password</button>
-      <div id="pw-msg" class="msg"></div>
-    </div>
   </div>
 
   <div class="copyright">© 2025 Faanzy Market</div>
 
   <script>
-    let currentUser = "";
+    const credentials = {
+      admin: "admin123",   // username: admin
+      user: "user123"      // username: user
+    };
 
     async function login() {
       const user = document.getElementById("username").value.trim().toLowerCase();
       const pass = document.getElementById("password").value.trim();
       const msg = document.getElementById("msg");
 
-      try {
-        const res = await fetch("/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: user, password: pass })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-          currentUser = user;
-          msg.textContent = "✅ Login berhasil!";
-          msg.className = "msg success";
-          document.getElementById("pw-box").style.display = "block";
-          await sendTelegramNotify(user);
-          setTimeout(() => {
-            window.location.href = user === "admin" ? "admin.html" : "user.html";
-          }, 1500);
-        } else {
-          msg.textContent = "❌ " + data.message;
-          msg.className = "msg error";
-        }
-      } catch (err) {
-        msg.textContent = "❌ Gagal login!";
-      }
-    }
-
-    async function ubahPassword() {
-      const newpw = document.getElementById("newpw").value.trim();
-      const pwMsg = document.getElementById("pw-msg");
-
-      if (!currentUser || !newpw) {
-        pwMsg.textContent = "❌ Masukkan password baru!";
-        pwMsg.className = "msg error";
-        return;
-      }
-
-      try {
-        const res = await fetch("/api/ubah-password", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: currentUser, password: newpw })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-          pwMsg.textContent = "✅ Password berhasil diubah.";
-          pwMsg.className = "msg success";
-        } else {
-          pwMsg.textContent = "❌ " + data.message;
-          pwMsg.className = "msg error";
-        }
-      } catch (err) {
-        pwMsg.textContent = "❌ Gagal ubah password!";
-        pwMsg.className = "msg error";
+      if ((user === "admin" && pass === credentials.admin) || 
+          (user === "user" && pass === credentials.user)) {
+        await sendTelegramNotify(user);
+        window.location.href = user === "admin" ? "admin.html" : "user.html";
+      } else {
+        msg.textContent = "❌ Username atau password salah!";
       }
     }
 
@@ -188,7 +117,7 @@
 
         await fetch("/api/telegram-login", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {"Content-Type": "application/json"},
           body: JSON.stringify(payload)
         });
       } catch (err) {
