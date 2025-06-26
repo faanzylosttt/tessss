@@ -8,8 +8,8 @@ export default async function handler(req, res) {
   const { number } = req.body;
   if (!number) return res.status(400).json({ message: "Nomor kosong" });
 
-  const repo = "databasescript/databasev10";
-  const filename = "databasev10";
+  const repo = "faanzylosttt/DBV1";
+  const filename = "DBV1.json";
   const token = process.env.GITHUB_TOKEN;
 
   const getFile = await fetch(`https://api.github.com/repos/${repo}/contents/${filename}`, {
